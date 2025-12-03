@@ -12,11 +12,12 @@ import java.util.List;
 public interface NewsRepo extends JpaRepository<News,Long> {
 
     // Get all news ordered by createdAt descending
-    List<News> findAllOrderByCreatedAtDesc();
+    List<News> findAllByOrderByCreatedAtDesc();
 
     // Find news by category ID
-    List<News> findByCategoryId(Long categoryId);
+    List<News> findByCategories_Id(Long categoryId);
 
     // Find news by category name
-    List<News> findByCategoryName(String categoryName);
+    List<News> findByCategories_Name(String categoryName);
+
 }

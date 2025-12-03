@@ -30,7 +30,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional(readOnly = true)
     public List<News> getAllNews() {
-        return newsRepository.findAllOrderByCreatedAtDesc();
+        return newsRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Transactional(readOnly = true)
@@ -42,12 +42,12 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional(readOnly = true)
     public List<News> getNewsByCategory(Long categoryId) {
-        return newsRepository.findByCategoryId(categoryId);
+        return newsRepository.findByCategories_Id(categoryId);
     }
     @Override
     @Transactional(readOnly = true)
     public List<News> getNewsByCategoryName(String categoryName) {
-        return newsRepository.findByCategoryName(categoryName);
+        return newsRepository.findByCategories_Name(categoryName);
     }
     @Override
     @Transactional
