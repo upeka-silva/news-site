@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .categories {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .categories h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .category-btn:hover {
+            background: #2980b9;
+        }
+
+        .category-btn.active {
+            background: #27ae60;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .news-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .news-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .news-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .category-tag {
+            background: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .news-date {
+            color: #95a5a6;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .news-detail {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .news-detail.active {
+            display: block;
+        }
+
+        .news-detail h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .news-content {
+            line-height: 1.8;
+            margin-bottom: 30px;
+            white-space: pre-wrap;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 30px;
+        }
+
+        .comments-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .comment-form {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .comment-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            padding: 10px 20px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #229954;
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .comment-content {
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .comment-date {
+            color: #95a5a6;
+            font-size: 12px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <h1>📰 News Website</h1>
+        <p>Stay updated with the latest news</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="categories">
+        <h2>Categories</h2>
+        <div class="category-buttons" id="categoryButtons">
+            <button class="category-btn active" onclick="filterNews('all')">All News</button>
+        </div>
+    </div>
+
+    <div id="newsListView">
+        <div class="news-grid" id="newsGrid">
+            <div class="loading">Loading news...</div>
+        </div>
+    </div>
+
+    <div id="newsDetailView" class="news-detail">
+        <button class="back-btn" onclick="showNewsList()">← Back to News</button>
+        <div id="newsDetailContent"></div>
+        <div class="comments-section">
+            <h3>Comments</h3>
+            <div class="comment-form">
+                <input type="text" id="commentAuthor" placeholder="Your name">
+                <textarea id="commentContent" placeholder="Write your comment..."></textarea>
+                <button class="submit-btn" onclick="submitComment()">Submit Comment</button>
+            </div>
+            <div id="commentsList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:8080/api';
+    let categories = [];
+    let allNews = [];
+    let currentNewsId = null;
+
+    async function loadCategories() {
+        try {
+            const response = await fetch(`${API_URL}/categories`);
+            categories = await response.json();
+
+            const categoryButtons = document.getElementById('categoryButtons');
+            categoryButtons.innerHTML = '<button class="category-btn active" onclick="filterNews(\'all\')">All News</button>';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.textContent = cat.name;
+                btn.onclick = () => filterNews(cat.id);
+                categoryButtons.appendChild(btn);
+            });
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
+
+    async function loadNews() {
+        try {
+            const response = await fetch(`${API_URL}/news`);
+            allNews = await response.json();
+            displayNews(allNews);
+        } catch (error) {
+            console.error('Error loading news:', error);
+            document.getElementById('newsGrid').innerHTML = '<div class="loading">Error loading news</div>';
+        }
+    }
+
+    function displayNews(newsList) {
+        const newsGrid = document.getElementById('newsGrid');
+
+        if (newsList.length === 0) {
+            newsGrid.innerHTML = '<div class="loading">No news available</div>';
+            return;
+        }
+
+        newsGrid.innerHTML = newsList.map(news => `
+                <div class="news-card" onclick="showNewsDetail(${news.id})">
+                    <h3>${news.headline}</h3>
+                    <div class="news-categories">
+                        ${news.categories.map(cat => `<span class="category-tag">${cat.name}</span>`).join('')}
+                    </div>
+                    <p class="news-date">${new Date(news.createdAt).toLocaleDateString()}</p>
+                </div>
+            `).join('');
+    }
+
+    async function filterNews(categoryId) {
+        const buttons = document.querySelectorAll('.category-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        if (categoryId === 'all') {
+            displayNews(allNews);
+        } else {
+            const filtered = allNews.filter(news =>
+                news.categories.some(cat => cat.id === categoryId)
+            );
+            displayNews(filtered);
+        }
+    }
+
+    async function showNewsDetail(newsId) {
+        try {
+            currentNewsId = newsId;
+            const response = await fetch(`${API_URL}/news/${newsId}`);
+            const news = await response.json();
+
+            document.getElementById('newsDetailContent').innerHTML = `
+                    <h2>${news.headline}</h2>
+                    <div class="news-categories">
+                        ${news.categories.map(cat => `<span class="category-tag">${cat.name}</span>`).join('')}
+                    </div>
+                    <p class="news-date">${new Date(news.createdAt).toLocaleString()}</p>
+                    <div class="news-content">${news.content}</div>
+                `;
+
+            document.getElementById('newsListView').style.display = 'none';
+            document.getElementById('newsDetailView').classList.add('active');
+
+            loadComments(newsId);
+        } catch (error) {
+            console.error('Error loading news detail:', error);
+        }
+    }
+
+    function showNewsList() {
+        document.getElementById('newsDetailView').classList.remove('active');
+        document.getElementById('newsListView').style.display = 'block';
+        currentNewsId = null;
+    }
+
+    async function loadComments(newsId) {
+        try {
+            const response = await fetch(`${API_URL}/news/${newsId}/comments`);
+            const comments = await response.json();
+
+            const commentsList = document.getElementById('commentsList');
+
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="loading">No comments yet. Be the first to comment!</p>';
+                return;
+            }
+
+            commentsList.innerHTML = comments.map(comment => `
+                    <div class="comment">
+                        <div class="comment-author">${comment.author}</div>
+                        <div class="comment-content">${comment.content}</div>
+                        <div class="comment-date">${new Date(comment.createdAt).toLocaleString()}</div>
+                    </div>
+                `).join('');
+        } catch (error) {
+            console.error('Error loading comments:', error);
+        }
+    }
+
+    async function submitComment() {
+        const author = document.getElementById('commentAuthor').value.trim();
+        const content = document.getElementById('commentContent').value.trim();
+
+        if (!author || !content) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/news/${currentNewsId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ author, content })
+            });
+
+            if (response.ok) {
+                document.getElementById('commentAuthor').value = '';
+                document.getElementById('commentContent').value = '';
+                loadComments(currentNewsId);
+            }
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+            alert('Error submitting comment');
+        }
+    }
+
+    // Initialize
+    loadCategories();
+    loadNews();
+</script>
+</body>
+</html>
