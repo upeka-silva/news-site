@@ -13,7 +13,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryServiceImpl(CategoryRepo categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-   @Override
+
+
+    @Override
     @Transactional(readOnly = true)
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
